@@ -9,9 +9,10 @@
 
 `npm run start:dev`
 
-App served @ http://localhost:8181 with nodemon
-Production
+App served @ http://localhost:4000 with nodemon
+
+## Production
 
 `npm run start:prod`
 
-App served @ http://localhost:8181 without nodemon
+App served @ http://localhost:4000 without nodemon
