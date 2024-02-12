@@ -118,7 +118,7 @@ async function deleteUser(id: string): Promise<boolean> {
   }
 }
 
-const server: http.Server = http.createServer(async function (
+export const server: http.Server = http.createServer(async function (
   req: http.IncomingMessage,
   res: http.ServerResponse<http.IncomingMessage> & {
     req: http.IncomingMessage;
