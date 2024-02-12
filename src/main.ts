@@ -1,6 +1,8 @@
 import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
 import http from 'http';
 import 'dotenv/config';
+import cluster from 'cluster';
+import os from 'os';
 
 interface UserDTO {
   username: string;
@@ -228,6 +230,19 @@ export const server: http.Server = http.createServer(async function (
   }
 });
 
-server.listen(port, () =>
-  console.log(`Server is running on http://localhost:${port}`),
-);
+if (cluster.isPrimary) {
+  const numCPUs = os.availableParallelism();
+  console.log(`Primary ${process.pid} is running`);
+
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork({ PORT: Number(port) + i });
+  }
+
+  cluster.on('exit', (worker) => {
+    console.log(`worker ${worker.process.pid} died`);
+  });
+} else {
+  server.listen(port, () =>
+    console.log(`Server is running on http://localhost:${port}`),
+  );
+}
